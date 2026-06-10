@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>DartKeep</title>
+  <title>DartKeep v2</title>
   <style>
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: system-ui, sans-serif;
       margin: 0;
       background: #111827;
       color: #e5e7eb;
@@ -14,8 +14,8 @@
       background: #1f2937;
       padding: 12px 16px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       border-bottom: 1px solid #374151;
     }
     header h1 {
@@ -23,15 +23,6 @@
       font-size: 20px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-    }
-    header .nav-buttons button {
-      margin-left: 8px;
-    }
-    main {
-      padding: 16px;
-    }
-    .hidden {
-      display: none;
     }
     button {
       background: #2563eb;
@@ -49,17 +40,16 @@
       opacity: 0.5;
       cursor: default;
     }
-    input, select {
-      padding: 6px 8px;
-      border-radius: 4px;
-      border: 1px solid #4b5563;
-      background: #111827;
-      color: #e5e7eb;
+    main {
+      padding: 16px;
+    }
+    .hidden {
+      display: none;
     }
     .card {
       background: #111827;
-      border-radius: 8px;
       border: 1px solid #374151;
+      border-radius: 8px;
       padding: 12px;
       margin-bottom: 16px;
     }
@@ -74,12 +64,12 @@
       align-items: center;
       margin-bottom: 8px;
     }
-    .row label {
-      min-width: 80px;
-    }
-    .players-list {
-      margin-top: 8px;
-      font-size: 14px;
+    input {
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid #4b5563;
+      background: #111827;
+      color: #e5e7eb;
     }
     .players-list span {
       display: inline-block;
@@ -90,7 +80,7 @@
     }
     .scoreboard {
       display: grid;
-      grid-template-columns: 1.5fr repeat(8, 1fr) 1fr;
+      grid-template-columns: 1.5fr repeat(12, 1fr) 1fr;
       gap: 4px;
       font-size: 13px;
       align-items: center;
@@ -111,25 +101,7 @@
     }
     .current-player {
       background: #1d4ed8;
-      color: #e5e7eb;
       border-radius: 4px;
-    }
-    .keypad {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      margin-top: 8px;
-      max-width: 220px;
-    }
-    .keypad button {
-      padding: 10px 0;
-      font-size: 16px;
-    }
-    .keypad-display {
-      font-size: 20px;
-      font-weight: 600;
-      margin-top: 4px;
-      min-height: 24px;
     }
     .banner {
       margin-top: 12px;
@@ -142,18 +114,23 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
+    /* Dartboard grid */
+    .dartboard-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      max-width: 260px;
+      margin-top: 10px;
     }
-    th, td {
-      padding: 6px 8px;
-      border-bottom: 1px solid #374151;
-      text-align: left;
+    .dartboard-grid button {
+      padding: 10px 0;
+      font-size: 16px;
     }
-    th {
-      background: #111827;
+    .multiplier-row, .bull-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+      max-width: 260px;
     }
     .tag {
       display: inline-block;
@@ -166,63 +143,79 @@
     }
   </style>
 </head>
+
 <body>
   <header>
     <h1>DartKeep</h1>
-    <div class="nav-buttons">
+    <div>
       <button id="homeBtn" class="secondary">Home</button>
       <button id="leaderboardBtn" class="secondary">Leaderboard</button>
     </div>
   </header>
 
   <main>
+
     <!-- HOME SCREEN -->
     <section id="homeScreen">
       <div class="card">
         <h2>Games</h2>
-        <p>Select a game to start scoring.</p>
-        <button id="startCountUpBtn">Count Up</button>
+        <div id="gameButtons"></div>
       </div>
 
       <div class="card">
         <h2>Leaderboard</h2>
-        <p>View player rankings across all DartKeep games.</p>
-        <button id="goLeaderboardFromHome">Open Leaderboard</button>
+        <button id="openLeaderboardFromHome">Open Leaderboard</button>
       </div>
     </section>
 
-    <!-- COUNT UP GAME SCREEN -->
-    <section id="countUpScreen" class="hidden">
+    <!-- GAME SETUP -->
+    <section id="setupScreen" class="hidden">
       <div class="card">
-        <h2>Count Up</h2>
+        <h2 id="setupGameName"></h2>
+
         <div class="row">
-          <label for="playerNameInput">Add player/team</label>
-          <input id="playerNameInput" type="text" placeholder="Name" />
+          <input id="playerNameInput" type="text" placeholder="Add player/team" />
           <button id="addPlayerBtn">Add</button>
         </div>
-        <div class="players-list" id="playersList"></div>
+
+        <div id="playersList" class="players-list"></div>
+
         <div class="row">
           <button id="startGameBtn">Start Game</button>
         </div>
-        <p style="font-size: 12px; color:#9ca3af;">
-          Count Up: 8 rounds, 3 darts per round. Highest total score wins.
-        </p>
       </div>
+    </section>
 
-      <div class="card" id="gameArea" class="hidden">
-        <h2>Game in Progress</h2>
-        <div id="roundInfo" style="margin-bottom:8px; font-size:14px;"></div>
+    <!-- GAME SCREEN -->
+    <section id="gameScreen" class="hidden">
+      <div class="card">
+        <h2 id="gameTitle"></h2>
 
-        <div class="scoreboard" id="scoreboard"></div>
+        <div id="roundInfo" style="margin-bottom:8px;"></div>
+
+        <div id="scoreboard"></div>
 
         <div style="margin-top:12px;">
           <div>Current Player: <span id="currentPlayerLabel" class="tag"></span></div>
-          <div class="keypad-display" id="keypadDisplay"></div>
-          <div class="keypad" id="keypad">
-            <!-- buttons generated by JS -->
+
+          <!-- Dartboard Input -->
+          <div id="dartboardArea">
+            <div class="dartboard-grid" id="dartboardNumbers"></div>
+
+            <div class="multiplier-row">
+              <button data-m="1">Single</button>
+              <button data-m="2">Double</button>
+              <button data-m="3">Triple</button>
+            </div>
+
+            <div class="bull-row">
+              <button data-bull="25">Bull</button>
+              <button data-bull="50">Double Bull</button>
+            </div>
           </div>
+
           <div class="row" style="margin-top:8px;">
-            <button id="undoBtn" class="secondary">Undo last score</button>
+            <button id="undoBtn" class="secondary">Undo</button>
             <button id="nextPlayerBtn">Next Player</button>
           </div>
         </div>
@@ -231,21 +224,13 @@
       </div>
     </section>
 
-    <!-- LEADERBOARD SCREEN -->
+    <!-- LEADERBOARD -->
     <section id="leaderboardScreen" class="hidden">
       <div class="card">
         <h2>Leaderboard</h2>
-        <p style="font-size:13px; color:#9ca3af;">
-          Elo ratings across all DartKeep games. Every completed game updates ratings.
-        </p>
         <table id="leaderboardTable">
           <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Player</th>
-              <th>Elo</th>
-              <th>Games</th>
-            </tr>
+            <tr><th>Rank</th><th>Player</th><th>Elo</th><th>Games</th></tr>
           </thead>
           <tbody></tbody>
         </table>
@@ -255,566 +240,20 @@
         <h2>Recent Games</h2>
         <table id="gamesTable">
           <thead>
-            <tr>
-              <th>Game</th>
-              <th>Players</th>
-              <th>Winner</th>
-              <th>Date</th>
-            </tr>
+            <tr><th>Game</th><th>Players</th><th>Winner</th><th>Date</th></tr>
           </thead>
           <tbody></tbody>
         </table>
       </div>
     </section>
+
   </main>
 
-  <script>
-    // -----------------------------
-    // Simple "database" using localStorage
-    // -----------------------------
-    const DB_KEY = "dartkeep_games_v1";
-    const ELO_KEY = "dartkeep_elo_v1";
+  <!-- MODULES -->
+  <script src="dart-games.js"></script>
+  <script src="game-engine.js"></script>
+  <script src="storage-elo.js"></script>
+  <script src="main.js"></script>
 
-    function loadGames() {
-      const raw = localStorage.getItem(DB_KEY);
-      return raw ? JSON.parse(raw) : [];
-    }
-
-    function saveGames(games) {
-      localStorage.setItem(DB_KEY, JSON.stringify(games));
-    }
-
-    function loadElo() {
-      const raw = localStorage.getItem(ELO_KEY);
-      return raw ? JSON.parse(raw) : {};
-    }
-
-    function saveElo(elo) {
-      localStorage.setItem(ELO_KEY, JSON.stringify(elo));
-    }
-
-    // -----------------------------
-    // Elo rating helpers
-    // -----------------------------
-    const DEFAULT_ELO = 1200;
-    const K_FACTOR = 32;
-
-    function expectedScore(ratingA, ratingB) {
-      return 1 / (1 + Math.pow(10, (ratingB - ratingA) / 400));
-    }
-
-    function updateEloForGame(game) {
-      // game: { type, players: [{name, totalScore}], winnerName }
-      const elo = loadElo();
-
-      // Ensure all players have ratings
-      game.players.forEach(p => {
-        if (!elo[p.name]) {
-          elo[p.name] = { rating: DEFAULT_ELO, games: 0 };
-        }
-      });
-
-      // For multi-player, treat as each pair playing each other
-      const players = game.players;
-      for (let i = 0; i < players.length; i++) {
-        for (let j = i + 1; j < players.length; j++) {
-          const pA = players[i];
-          const pB = players[j];
-          const rA = elo[pA.name].rating;
-          const rB = elo[pB.name].rating;
-
-          const scoreA = pA.totalScore;
-          const scoreB = pB.totalScore;
-
-          let SA, SB;
-          if (scoreA > scoreB) {
-            SA = 1; SB = 0;
-          } else if (scoreA < scoreB) {
-            SA = 0; SB = 1;
-          } else {
-            SA = 0.5; SB = 0.5;
-          }
-
-          const EA = expectedScore(rA, rB);
-          const EB = expectedScore(rB, rA);
-
-          const newRA = rA + K_FACTOR * (SA - EA);
-          const newRB = rB + K_FACTOR * (SB - EB);
-
-          elo[pA.name].rating = newRA;
-          elo[pB.name].rating = newRB;
-        }
-      }
-
-      // Increment games count
-      players.forEach(p => {
-        elo[p.name].games = (elo[p.name].games || 0) + 1;
-      });
-
-      saveElo(elo);
-    }
-
-    // -----------------------------
-    // Navigation
-    // -----------------------------
-    const homeScreen = document.getElementById("homeScreen");
-    const countUpScreen = document.getElementById("countUpScreen");
-    const leaderboardScreen = document.getElementById("leaderboardScreen");
-
-    document.getElementById("homeBtn").addEventListener("click", () => {
-      showScreen("home");
-    });
-    document.getElementById("leaderboardBtn").addEventListener("click", () => {
-      showScreen("leaderboard");
-    });
-    document.getElementById("goLeaderboardFromHome").addEventListener("click", () => {
-      showScreen("leaderboard");
-    });
-
-    function showScreen(which) {
-      homeScreen.classList.add("hidden");
-      countUpScreen.classList.add("hidden");
-      leaderboardScreen.classList.add("hidden");
-
-      if (which === "home") {
-        homeScreen.classList.remove("hidden");
-      } else if (which === "countup") {
-        countUpScreen.classList.remove("hidden");
-      } else if (which === "leaderboard") {
-        leaderboardScreen.classList.remove("hidden");
-        renderLeaderboard();
-        renderGamesTable();
-      }
-    }
-
-    // -----------------------------
-    // Count Up game state
-    // -----------------------------
-    const startCountUpBtn = document.getElementById("startCountUpBtn");
-    const addPlayerBtn = document.getElementById("addPlayerBtn");
-    const playerNameInput = document.getElementById("playerNameInput");
-    const playersListEl = document.getElementById("playersList");
-    const startGameBtn = document.getElementById("startGameBtn");
-    const gameArea = document.getElementById("gameArea");
-    const scoreboardEl = document.getElementById("scoreboard");
-    const roundInfoEl = document.getElementById("roundInfo");
-    const currentPlayerLabel = document.getElementById("currentPlayerLabel");
-    const keypadDisplay = document.getElementById("keypadDisplay");
-    const keypadEl = document.getElementById("keypad");
-    const undoBtn = document.getElementById("undoBtn");
-    const nextPlayerBtn = document.getElementById("nextPlayerBtn");
-    const winnerBanner = document.getElementById("winnerBanner");
-
-    let setupPlayers = [];
-    let gameStarted = false;
-
-    const MAX_ROUNDS = 8;
-
-    let gameState = null;
-    // gameState = {
-    //   players: [{ name, scores: [r1, r2, ...], total: 0 }],
-    //   currentPlayerIndex,
-    //   currentRound,
-    //   history: [{ playerIndex, round, score }],
-    //   currentInput: ""
-    // }
-
-    startCountUpBtn.addEventListener("click", () => {
-      showScreen("countup");
-    });
-
-    addPlayerBtn.addEventListener("click", () => {
-      const name = playerNameInput.value.trim();
-      if (!name) return;
-      if (!setupPlayers.includes(name)) {
-        setupPlayers.push(name);
-        renderSetupPlayers();
-      }
-      playerNameInput.value = "";
-      playerNameInput.focus();
-    });
-
-    function renderSetupPlayers() {
-      playersListEl.innerHTML = "";
-      setupPlayers.forEach(name => {
-        const span = document.createElement("span");
-        span.textContent = name;
-        playersListEl.appendChild(span);
-      });
-    }
-
-    startGameBtn.addEventListener("click", () => {
-      if (setupPlayers.length < 1) {
-        alert("Add at least one player/team.");
-        return;
-      }
-      startCountUpGame();
-    });
-
-    function startCountUpGame() {
-      gameStarted = true;
-      winnerBanner.classList.add("hidden");
-      gameArea.classList.remove("hidden");
-
-      gameState = {
-        players: setupPlayers.map(name => ({
-          name,
-          scores: Array(MAX_ROUNDS).fill(null),
-          total: 0
-        })),
-        currentPlayerIndex: 0,
-        currentRound: 1,
-        history: [],
-        currentInput: ""
-      };
-
-      buildScoreboard();
-      updateScoreboard();
-      buildKeypad();
-      updateRoundInfo();
-      updateCurrentPlayerLabel();
-      updateKeypadDisplay();
-    }
-
-    function buildScoreboard() {
-      scoreboardEl.innerHTML = "";
-
-      const headerRow = document.createElement("div");
-      headerRow.className = "scoreboard scoreboard-header";
-
-      const nameHeader = document.createElement("div");
-      nameHeader.className = "scoreboard-cell";
-      nameHeader.textContent = "Player";
-      headerRow.appendChild(nameHeader);
-
-      for (let r = 1; r <= MAX_ROUNDS; r++) {
-        const h = document.createElement("div");
-        h.className = "scoreboard-cell";
-        h.textContent = "R" + r;
-        headerRow.appendChild(h);
-      }
-
-      const totalHeader = document.createElement("div");
-      totalHeader.className = "scoreboard-cell";
-      totalHeader.textContent = "Total";
-      headerRow.appendChild(totalHeader);
-
-      scoreboardEl.appendChild(headerRow);
-
-      gameState.players.forEach((p, idx) => {
-        const row = document.createElement("div");
-        row.className = "scoreboard";
-
-        const nameCell = document.createElement("div");
-        nameCell.className = "scoreboard-cell scoreboard-player";
-        nameCell.dataset.playerIndex = idx;
-        row.appendChild(nameCell);
-
-        for (let r = 1; r <= MAX_ROUNDS; r++) {
-          const c = document.createElement("div");
-          c.className = "scoreboard-cell";
-          c.dataset.playerIndex = idx;
-          c.dataset.round = r;
-          row.appendChild(c);
-        }
-
-        const totalCell = document.createElement("div");
-        totalCell.className = "scoreboard-cell";
-        totalCell.dataset.playerIndex = idx;
-        totalCell.dataset.total = "true";
-        row.appendChild(totalCell);
-
-        scoreboardEl.appendChild(row);
-      });
-    }
-
-    function updateScoreboard() {
-      const rows = scoreboardEl.querySelectorAll(".scoreboard");
-      rows.forEach((row, rowIndex) => {
-        if (rowIndex === 0) return; // header
-        const playerIndex = rowIndex - 1;
-        const player = gameState.players[playerIndex];
-        const cells = row.querySelectorAll(".scoreboard-cell");
-
-        cells[0].textContent = player.name;
-        if (playerIndex === gameState.currentPlayerIndex && !isGameOver()) {
-          cells[0].classList.add("current-player");
-        } else {
-          cells[0].classList.remove("current-player");
-        }
-
-        let total = 0;
-        for (let r = 1; r <= MAX_ROUNDS; r++) {
-          const score = player.scores[r - 1];
-          const cell = cells[r];
-          cell.textContent = score != null ? score : "";
-          if (score != null) total += score;
-        }
-        player.total = total;
-        cells[cells.length - 1].textContent = total;
-      });
-    }
-
-    function updateRoundInfo() {
-      if (isGameOver()) {
-        roundInfoEl.textContent = "Game complete.";
-      } else {
-        roundInfoEl.textContent = `Round ${gameState.currentRound} of ${MAX_ROUNDS}`;
-      }
-    }
-
-    function updateCurrentPlayerLabel() {
-      if (isGameOver()) {
-        currentPlayerLabel.textContent = "-";
-      } else {
-        currentPlayerLabel.textContent = gameState.players[gameState.currentPlayerIndex].name;
-      }
-    }
-
-    function buildKeypad() {
-      keypadEl.innerHTML = "";
-      const buttons = ["1","2","3","4","5","6","7","8","9","C","0","OK"];
-      buttons.forEach(label => {
-        const btn = document.createElement("button");
-        btn.textContent = label;
-        btn.addEventListener("click", () => handleKeypadPress(label));
-        keypadEl.appendChild(btn);
-      });
-    }
-
-    function handleKeypadPress(label) {
-      if (isGameOver()) return;
-
-      if (label === "C") {
-        gameState.currentInput = "";
-      } else if (label === "OK") {
-        if (gameState.currentInput === "") return;
-        const score = parseInt(gameState.currentInput, 10);
-        applyScore(score);
-        gameState.currentInput = "";
-      } else {
-        if (gameState.currentInput.length < 3) {
-          gameState.currentInput += label;
-        }
-      }
-      updateKeypadDisplay();
-    }
-
-    function updateKeypadDisplay() {
-      keypadDisplay.textContent = gameState.currentInput || "Enter round score (3 darts)";
-    }
-
-    function applyScore(score) {
-      const pIndex = gameState.currentPlayerIndex;
-      const roundIndex = gameState.currentRound - 1;
-
-      gameState.players[pIndex].scores[roundIndex] = score;
-      gameState.history.push({
-        playerIndex: pIndex,
-        round: gameState.currentRound,
-        score
-      });
-
-      updateScoreboard();
-
-      if (isRoundComplete()) {
-        if (gameState.currentRound < MAX_ROUNDS) {
-          gameState.currentRound++;
-        }
-      }
-
-      advanceToNextPlayer();
-      updateRoundInfo();
-      updateCurrentPlayerLabel();
-
-      if (isGameOver()) {
-        finalizeGame();
-      }
-    }
-
-    function isRoundComplete() {
-      const roundIndex = gameState.currentRound - 1;
-      return gameState.players.every(p => p.scores[roundIndex] != null);
-    }
-
-    function advanceToNextPlayer() {
-      if (isGameOver()) return;
-
-      let nextIndex = gameState.currentPlayerIndex;
-      const roundIndex = gameState.currentRound - 1;
-
-      for (let i = 0; i < gameState.players.length; i++) {
-        nextIndex = (nextIndex + 1) % gameState.players.length;
-        if (gameState.players[nextIndex].scores[roundIndex] == null) {
-          gameState.currentPlayerIndex = nextIndex;
-          updateScoreboard();
-          return;
-        }
-      }
-
-      if (gameState.currentRound < MAX_ROUNDS) {
-        gameState.currentRound++;
-        const newRoundIndex = gameState.currentRound - 1;
-        for (let i = 0; i < gameState.players.length; i++) {
-          if (gameState.players[i].scores[newRoundIndex] == null) {
-            gameState.currentPlayerIndex = i;
-            break;
-          }
-        }
-      }
-
-      updateScoreboard();
-    }
-
-    function isGameOver() {
-      return gameState.players.every(p =>
-        p.scores.every(s => s != null)
-      );
-    }
-
-    undoBtn.addEventListener("click", () => {
-      if (!gameState || gameState.history.length === 0) return;
-      const last = gameState.history.pop();
-      const pIndex = last.playerIndex;
-      const round = last.round;
-      const roundIndex = round - 1;
-
-      gameState.players[pIndex].scores[roundIndex] = null;
-
-      gameState.currentRound = round;
-      gameState.currentPlayerIndex = pIndex;
-
-      updateScoreboard();
-      updateRoundInfo();
-      updateCurrentPlayerLabel();
-      winnerBanner.classList.add("hidden");
-    });
-
-    nextPlayerBtn.addEventListener("click", () => {
-      if (!gameState || isGameOver()) return;
-      advanceToNextPlayer();
-      updateRoundInfo();
-      updateCurrentPlayerLabel();
-    });
-
-    function finalizeGame() {
-      updateScoreboard();
-      updateRoundInfo();
-      updateCurrentPlayerLabel();
-
-      let bestScore = -Infinity;
-      let winnerName = null;
-      gameState.players.forEach(p => {
-        if (p.total > bestScore) {
-          bestScore = p.total;
-          winnerName = p.name;
-        }
-      });
-
-      winnerBanner.textContent = `Winner: ${winnerName} with ${bestScore} points!`;
-      winnerBanner.classList.remove("hidden");
-
-      const gameRecord = {
-        id: Date.now(),
-        type: "Count Up",
-        players: gameState.players.map(p => ({
-          name: p.name,
-          totalScore: p.total
-        })),
-        winnerName,
-        createdAt: new Date().toISOString()
-      };
-
-      const games = loadGames();
-      games.push(gameRecord);
-      saveGames(games);
-
-      updateEloForGame(gameRecord);
-    }
-
-    // -----------------------------
-    // Leaderboard rendering
-    // -----------------------------
-    function renderLeaderboard() {
-      const elo = loadElo();
-      const tbody = document.querySelector("#leaderboardTable tbody");
-      tbody.innerHTML = "";
-
-      const entries = Object.entries(elo).map(([name, data]) => ({
-        name,
-        rating: data.rating,
-        games: data.games || 0
-      }));
-
-      entries.sort((a, b) => b.rating - a.rating);
-
-      entries.forEach((entry, index) => {
-        const tr = document.createElement("tr");
-        const rankTd = document.createElement("td");
-        rankTd.textContent = index + 1;
-        const nameTd = document.createElement("td");
-        nameTd.textContent = entry.name;
-        const eloTd = document.createElement("td");
-        eloTd.textContent = Math.round(entry.rating);
-        const gamesTd = document.createElement("td");
-        gamesTd.textContent = entry.games;
-
-        tr.appendChild(rankTd);
-        tr.appendChild(nameTd);
-        tr.appendChild(eloTd);
-        tr.appendChild(gamesTd);
-        tbody.appendChild(tr);
-      });
-
-      if (entries.length === 0) {
-        const tr = document.createElement("tr");
-        const td = document.createElement("td");
-        td.colSpan = 4;
-        td.textContent = "No games played yet.";
-        tbody.appendChild(tr);
-        tr.appendChild(td);
-      }
-    }
-
-    function renderGamesTable() {
-      const games = loadGames().slice().sort((a, b) => b.id - a.id);
-      const tbody = document.querySelector("#gamesTable tbody");
-      tbody.innerHTML = "";
-
-      games.forEach(game => {
-        const tr = document.createElement("tr");
-        const gameTd = document.createElement("td");
-        gameTd.textContent = game.type;
-        const playersTd = document.createElement("td");
-        playersTd.textContent = game.players.map(p => `${p.name} (${p.totalScore})`).join(", ");
-        const winnerTd = document.createElement("td");
-        winnerTd.textContent = game.winnerName;
-        const dateTd = document.createElement("td");
-        const d = new Date(game.createdAt);
-        dateTd.textContent = d.toLocaleString();
-
-        tr.appendChild(gameTd);
-        tr.appendChild(playersTd);
-        tr.appendChild(winnerTd);
-        tr.appendChild(dateTd);
-        tbody.appendChild(tr);
-      });
-
-      if (games.length === 0) {
-        const tr = document.createElement("tr");
-        const td = document.createElement("td");
-        td.colSpan = 4;
-        td.textContent = "No games stored yet.";
-        tr.appendChild(td);
-        tbody.appendChild(tr);
-      }
-    }
-
-    // -----------------------------
-    // Init
-    // -----------------------------
-    showScreen("home");
-  </script>
 </body>
 </html>
-
