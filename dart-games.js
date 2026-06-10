@@ -14,11 +14,11 @@ const DartGames = {
     winnerType: "highest",     // highest total wins
   },
 
-  highscore: {
-    id: "highscore",
-    name: "High Score (10 Rounds)",
+  countup15: {
+    id: "countup15",
+    name: "Count Up (15 Rounds)",
     kind: "rounds",
-    rounds: 10,
+    rounds: 15,
     dartsPerTurn: 3,
     scoringType: "sum",
     winnerType: "highest",
