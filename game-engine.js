@@ -275,3 +275,19 @@ function undoLast(state) {
 
     case "cricket":
       p.cricket[last.hitValue] = last.before;
+      p.total -= last.scoringHits * last.hitValue;
+      break;
+
+    case "cricket-miss":
+      // nothing to undo (score never changed)
+      break;
+
+    case "around":
+      p.progress = last.progress - 1;
+      break;
+
+    case "around-miss":
+      // nothing to undo (score never changed)
+      break;
+  }
+}
