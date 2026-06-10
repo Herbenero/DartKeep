@@ -332,6 +332,7 @@ function buildDartboard() {
     updateScoreboard();
     updateRoundInfo();
     updateCurrentPlayerLabel();
+    lastMultiplier = 1; // Reset multiplier
   };
 
   // Multiplier buttons
@@ -366,6 +367,9 @@ function handleHit(value, forcedMultiplier = null) {
     finalizeGame();
     return;
   }
+
+  // Reset multiplier to 1 after each dart, so next number defaults to single
+  lastMultiplier = 1;
 }
 
 
@@ -378,6 +382,7 @@ nextPlayerBtn.onclick = () => {
   updateScoreboard();
   updateRoundInfo();
   updateCurrentPlayerLabel();
+  lastMultiplier = 1; // Reset multiplier
 };
 
 undoBtn.onclick = () => {
@@ -385,6 +390,7 @@ undoBtn.onclick = () => {
   updateScoreboard();
   updateRoundInfo();
   updateCurrentPlayerLabel();
+  lastMultiplier = 1; // Reset multiplier
 };
 
 
