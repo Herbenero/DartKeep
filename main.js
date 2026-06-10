@@ -321,7 +321,7 @@ function buildDartboard() {
   for (let n = 1; n <= 20; n++) {
     const btn = document.createElement("button");
     btn.textContent = n;
-    btn.onclick = () => handleHit(n, 1);
+    btn.onclick = () => handleHit(n);
     dartboardNumbers.appendChild(btn);
   }
 
