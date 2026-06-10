@@ -193,6 +193,7 @@ function buildScoreboard() {
   state.players.forEach((p, idx) => {
     const row = document.createElement("div");
     row.className = "scoreboard";
+    row.dataset.scoreboardPlayer = idx;
 
     const name = document.createElement("div");
     name.className = "scoreboard-cell scoreboard-player";
@@ -250,7 +251,7 @@ function updateScoreboard() {
   const game = selectedGameDef;
 
   state.players.forEach((p, idx) => {
-    const row = scoreboardEl.querySelectorAll(".scoreboard")[idx + 1];
+    const row = document.querySelector(`[data-scoreboard-player="${idx}"]`);
     const cells = row.querySelectorAll(".scoreboard-cell");
 
     // Name cell
