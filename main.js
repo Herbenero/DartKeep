@@ -326,8 +326,16 @@ function buildDartboard() {
     dartboardNumbers.appendChild(btn);
   }
 
+  // Miss button - skip turn without scoring
+  document.getElementById("missBtn").onclick = () => {
+    nextPlayer(state);
+    updateScoreboard();
+    updateRoundInfo();
+    updateCurrentPlayerLabel();
+  };
+
   // Multiplier buttons
-  document.querySelectorAll(".multiplier-row button").forEach(btn => {
+  document.querySelectorAll(".multiplier-row button:not(#missBtn)").forEach(btn => {
     btn.onclick = () => {
       const m = parseInt(btn.dataset.m, 10);
       lastMultiplier = m;
