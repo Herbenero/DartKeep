@@ -347,7 +347,7 @@ function buildDartboard() {
   document.querySelectorAll(".bull-row button").forEach(btn => {
     btn.onclick = () => {
       const val = parseInt(btn.dataset.bull, 10);
-      handleHit(val, val === 50 ? 2 : 1);
+      handleHit(val, val === 25 ? 2 : 1);
     };
   });
 
