@@ -1,6 +1,6 @@
 // main.js
 //
-// UI controller for DartKeep v2.
+// UI controller for DartKeep.
 // Connects the HTML UI to the game engine and storage/Elo modules.
 
 // ------------------------------------------------------------
