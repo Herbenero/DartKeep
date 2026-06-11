@@ -246,8 +246,11 @@ function buildScoreboard() {
   });
 }
 
+// main.js
 function updateScoreboard() {
   const game = selectedGameDef;
+  // 1. Identify if we are playing a Shanghai variant
+  const isShanghai = game.id === "shanghai" || game.id === "shanghai_7";
 
   state.players.forEach((p, idx) => {
     const row = document.querySelector(`[data-scoreboard-player="${idx}"]`);
@@ -265,8 +268,16 @@ function updateScoreboard() {
       let total = 0;
       for (let r = 0; r < game.rounds; r++) {
         const score = p.scores[r] || 0;
-        cells[r + 1].textContent = score || "";
+        const cell = cells[r + 1]; // Offset by 1 for name cell
+        
+        cell.textContent = score || "";
         total += score;
+
+        // 2. Clear previous highlights and apply new one for Shanghai
+        cell.classList.remove("active-target");
+        if (isShanghai && (r + 1) === state.currentRound && !state.gameOver) {
+          cell.classList.add("active-target");
+        }
       }
       cells[cells.length - 1].textContent = total;
 
@@ -285,8 +296,18 @@ function updateScoreboard() {
       cells[1].textContent = needed;
     }
   });
-}
 
+  // 3. Highlight the header column (R1, R2, etc.)
+  if (isShanghai && !state.gameOver) {
+    const headerCells = document.querySelectorAll(".scoreboard-header .scoreboard-cell");
+    headerCells.forEach((cell, i) => {
+      cell.classList.remove("active-target");
+      if (i === state.currentRound) { 
+        cell.classList.add("active-target");
+      }
+    });
+  }
+}
 function updateRoundInfo() {
   const game = selectedGameDef;
 
