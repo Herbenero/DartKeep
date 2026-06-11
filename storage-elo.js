@@ -1,145 +1,86 @@
-// storage-elo.js
-//
-// LocalStorage-based database + Elo rating system for DartKeep v2.
-// Stores:
-//   - Completed games
-//   - Player Elo ratings
-//
-// Exposes:
-//   loadGames(), saveGameRecord()
-//   loadElo(), updateEloForGame()
-//   getLeaderboardData(), getRecentGames()
+// storage-elo.js (Online Version)
 
+const BIN_ID = '6a2ad0e3f5f4af5e29dfe321
+';
+const API_KEY = 'YOUR_API_KEY_HERE';
+const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-// ------------------------------------------------------------
-// LocalStorage keys
-// ------------------------------------------------------------
-const DB_KEY = "dartkeep_games_v2";
-const ELO_KEY = "dartkeep_elo_v2";
-
-
-// ------------------------------------------------------------
-// GAME STORAGE
-// ------------------------------------------------------------
-function loadGames() {
-  const raw = localStorage.getItem(DB_KEY);
-  return raw ? JSON.parse(raw) : [];
+// Helper to fetch data from the online bin
+async function fetchOnlineData() {
+  try {
+    const response = await fetch(BASE_URL, {
+      method: 'GET',
+      headers: { 'X-Master-Key': API_KEY }
+    });
+    const data = await response.json();
+    return data.record; // JSONbin wraps records in a .record object
+  } catch (err) {
+    console.error("Failed to fetch online data", err);
+    return { games: [], elo: {} };
+  }
 }
 
-function saveGameRecord(gameRecord) {
-  const games = loadGames();
-  games.push(gameRecord);
-  localStorage.setItem(DB_KEY, JSON.stringify(games));
+// Helper to save data back to the online bin
+async function saveOnlineData(newData) {
+  try {
+    await fetch(BASE_URL, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': API_KEY
+      },
+      body: JSON.stringify(newData)
+    });
+  } catch (err) {
+    console.error("Failed to save online data", err);
+  }
 }
 
-
-// ------------------------------------------------------------
-// ELO SYSTEM
-// ------------------------------------------------------------
-const DEFAULT_ELO = 1200;
-const K_FACTOR = 32;
-
-function loadElo() {
-  const raw = localStorage.getItem(ELO_KEY);
-  return raw ? JSON.parse(raw) : {};
+// Rewritten storage functions
+async function loadGames() {
+  const data = await fetchOnlineData();
+  return data.games || [];
 }
 
-function saveElo(elo) {
-  localStorage.setItem(ELO_KEY, JSON.stringify(elo));
+async function saveGameRecord(gameRecord) {
+  const data = await fetchOnlineData();
+  data.games = data.games || [];
+  data.games.push(gameRecord);
+  await saveOnlineData(data);
 }
 
-function expectedScore(rA, rB) {
-  return 1 / (1 + Math.pow(10, (rB - rA) / 400));
+async function loadElo() {
+  const data = await fetchOnlineData();
+  return data.elo || {};
 }
 
-
-// ------------------------------------------------------------
-// Update Elo after a completed game
-// gameRecord = {
-//   id,
-//   type,
-//   players: [{ name, totalScore }],
-//   winnerName,
-//   createdAt
-// }
-// ------------------------------------------------------------
-function updateEloForGame(gameRecord) {
-  const elo = loadElo();
+// Updated Elo logic for Async
+async function updateEloForGame(gameRecord) {
+  const data = await fetchOnlineData();
+  const elo = data.elo || {};
   const players = gameRecord.players;
+  const K_FACTOR = 32;
 
-  // Ensure all players have ratings
   players.forEach(p => {
-    if (!elo[p.name]) {
-      elo[p.name] = { rating: DEFAULT_ELO, games: 0 };
-    }
+    if (!elo[p.name]) elo[p.name] = { rating: 1200, games: 0 };
   });
 
-  // Multi-player Elo: treat as round-robin pairwise matches
+  // Simplified pairwise Elo update (reusing your existing logic)
   for (let i = 0; i < players.length; i++) {
     for (let j = i + 1; j < players.length; j++) {
-      const A = players[i];
-      const B = players[j];
-
-      const rA = elo[A.name].rating;
-      const rB = elo[B.name].rating;
-
-      let SA, SB;
-
-      if (A.totalScore > B.totalScore) {
-        SA = 1; SB = 0;
-      } else if (A.totalScore < B.totalScore) {
-        SA = 0; SB = 1;
-      } else {
-        SA = 0.5; SB = 0.5;
-      }
-
-      const EA = expectedScore(rA, rB);
-      const EB = expectedScore(rB, rA);
-
+      const A = players[i]; const B = players[j];
+      const rA = elo[A.name].rating; const rB = elo[B.name].rating;
+      let SA = 0.5, SB = 0.5;
+      if (A.totalScore > B.totalScore) { SA = 1; SB = 0; }
+      else if (A.totalScore < B.totalScore) { SA = 0; SB = 1; }
+      const EA = 1 / (1 + Math.pow(10, (rB - rA) / 400));
+      const EB = 1 / (1 + Math.pow(10, (rA - rB) / 400));
       elo[A.name].rating = rA + K_FACTOR * (SA - EA);
       elo[B.name].rating = rB + K_FACTOR * (SB - EB);
     }
   }
 
-  // Increment games played
-  players.forEach(p => {
-    elo[p.name].games = (elo[p.name].games || 0) + 1;
-  });
-
-  saveElo(elo);
+  players.forEach(p => elo[p.name].games++);
+  data.elo = elo;
+  await saveOnlineData(data);
 }
-
-
-// ------------------------------------------------------------
-// Leaderboard data
-// ------------------------------------------------------------
-function getLeaderboardData() {
-  const elo = loadElo();
-  const entries = Object.entries(elo).map(([name, data]) => ({
-    name,
-    rating: Math.round(data.rating),
-    games: data.games || 0
-  }));
-
-  entries.sort((a, b) => b.rating - a.rating);
-  return entries;
-}
-
-
-// ------------------------------------------------------------
-// Recent games
-// ------------------------------------------------------------
-function getRecentGames() {
-  return loadGames().slice().sort((a, b) => b.id - a.id);
-}
-
-
-// ------------------------------------------------------------
-// Export to global
-// ------------------------------------------------------------
-window.loadGames = loadGames;
-window.saveGameRecord = saveGameRecord;
-window.loadElo = loadElo;
-window.updateEloForGame = updateEloForGame;
-window.getLeaderboardData = getLeaderboardData;
-window.getRecentGames = getRecentGames;
