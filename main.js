@@ -2,7 +2,8 @@
 //
 // UI controller for DartKeep v2.
 // Connects the HTML UI to the game engine and storage/Elo modules.
-
+let state = null;
+let dartsThrownThisTurn = 0;
 // ------------------------------------------------------------
 // DOM ELEMENTS
 // ------------------------------------------------------------
@@ -383,6 +384,8 @@ function handleHit(value, forcedMultiplier = null) {
   const m = forcedMultiplier || lastMultiplier;
 
   applyDartHit(state, value, m);
+  dartsThrownThisTurn++; // <--- Increment counter
+  
   updateScoreboard();
 
   if (state.gameOver) {
@@ -390,8 +393,21 @@ function handleHit(value, forcedMultiplier = null) {
     return;
   }
 
-  // Reset multiplier to 1 after each dart, so next number defaults to single
+  // Check if 3 darts have been thrown
+  if (dartsThrownThisTurn >= 3) {
+    autoAdvanceTurn(); // <--- Auto-move to next player
+  }
+
   lastMultiplier = 1;
+}
+
+// Add this helper function immediately below handleHit
+function autoAdvanceTurn() {
+  dartsThrownThisTurn = 0; // Reset the counter
+  nextPlayer(state);
+  updateScoreboard();
+  updateRoundInfo();
+  updateCurrentPlayerLabel();
 }
 
 
