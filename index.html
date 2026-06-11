@@ -4,6 +4,23 @@
   <meta charset="UTF-8" />
   <title>DartKeep</title>
   <style>
+   /* Update the Games grid to support multiple columns */
+#gameButtons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  width: 100%;
+  padding: 10px 0;
+}
+
+#gameButtons button {
+  width: 100%;
+  margin-bottom: 0 !important; /* Overrides the previous block display margin */
+  padding: 12px 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
     body {
       font-family: system-ui, sans-serif;
       margin: 0;
