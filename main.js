@@ -73,6 +73,65 @@ function buildHomeButtons() {
 }
 
 buildHomeButtons();
+/* centering.css — add into your main stylesheet */
+html, body, #root, #app {
+  height: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* Center the entire app vertically & horizontally */
+#app, .main-page {
+  display: flex;
+  align-items: center;     /* vertical center */
+  justify-content: center; /* horizontal center */
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+/* Layout: side-by-side on wide screens, stacked on narrow screens */
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* two-column layout for larger screens */
+@media (min-width: 900px) {
+  .main-layout {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    gap: 2rem;
+  }
+}
+
+/* Game play area: center content in this region */
+.game-play {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 900px;   /* adjust as needed */
+  background: transparent;
+  padding: 0.5rem;
+}
+
+/* Leaderboard: vertical column, centered */
+.leaderboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 420px;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
 
 
 // ------------------------------------------------------------
