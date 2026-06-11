@@ -6,8 +6,7 @@ const DartGames = {
   x01_301: { id: "x01_301", name: "301", kind: "x01", startingScore: 301, dartsPerTurn: 3, scoringType: "subtract", winnerType: "firstToZero" },
   x01_501: { id: "x01_501", name: "501", kind: "x01", startingScore: 501, dartsPerTurn: 3, scoringType: "subtract", winnerType: "firstToZero" },
   cricket: { id: "cricket", name: "Cricket", kind: "cricket", targets: [15, 16, 17, 18, 19, 20, 25], dartsPerTurn: 3, scoringType: "cricket", winnerType: "closedAndHigh" },
-  around: { id: "around", name: "Around the World", kind: "around", targets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], dartsPerTurn: 3, scoringType: "hitTarget", winnerType: "firstToFinish" },
-
+ 
   // New Games
   dart9_century: { id: "dart9_century", name: "9 Dart Century", kind: "rounds", rounds: 3, dartsPerTurn: 3, scoringType: "sum", winnerType: "highest" },
   all_5s: { id: "all_5s", name: "All 5's", kind: "rounds", rounds: 10, dartsPerTurn: 3, scoringType: "sum", winnerType: "highest" },
@@ -22,7 +21,7 @@ const DartGames = {
   jdc_challenge: { id: "jdc_challenge", name: "JDC Challenge", kind: "rounds", rounds: 15, dartsPerTurn: 3, scoringType: "sum", winnerType: "highest" },
   killer: { id: "killer", name: "Killer", kind: "rounds", rounds: 10, dartsPerTurn: 3, scoringType: "sum", winnerType: "highest" },
   prisoner: { id: "prisoner", name: "Prisoner", kind: "rounds", rounds: 10, dartsPerTurn: 3, scoringType: "sum", winnerType: "highest" },
-  quick_draw: { id: "quick_draw", name: "Quick Draw", kind: "rounds", rounds: 5, dartsPerTurn: 3, scoringType: "sum", winnerType: "highest" },
+  quick_draw: { id: "quick_draw", name: "Quick Draw", kind: "rounds", rounds: 3, dartsPerTurn: 3, scoringType: "sum", winnerType: "highest" },
   shanghai: { id: "shanghai", name: "Shanghai", kind: "rounds", rounds: 20, dartsPerTurn: 3, scoringType: "sum", winnerType: "highest" },
   shanghai_7: { id: "shanghai_7", name: "Shanghai 7", kind: "rounds", rounds: 7, dartsPerTurn: 3, scoringType: "sum", winnerType: "highest" },
   shove_penny: { id: "shove_penny", name: "Shove a Penny", kind: "rounds", rounds: 9, dartsPerTurn: 3, scoringType: "sum", winnerType: "highest" },
