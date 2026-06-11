@@ -446,9 +446,11 @@ function finalizeGame() {
 // ------------------------------------------------------------
 // LEADERBOARD
 // ------------------------------------------------------------
-function renderLeaderboard() {
-  const data = getLeaderboardData();
-  leaderboardTable.innerHTML = "";
+async function renderLeaderboard() {
+  const eloData = await loadElo(); // Now async
+  const data = Object.entries(eloData).map(([name, d]) => ({
+   name, rating: Math.round(d.rating), games: d.games
+  })).sort((a,b) => b.rating - a.rating);
 
   if (data.length === 0) {
     const tr = document.createElement("tr");
@@ -474,9 +476,9 @@ function renderLeaderboard() {
   });
 }
 
-function renderRecentGames() {
-  const games = getRecentGames();
-  gamesTable.innerHTML = "";
+async function renderRecentGames() {
+  const games = await loadGames(); // Now async
+  // ... rest of your rendering and filtering code ...
 
   if (games.length === 0) {
     const tr = document.createElement("tr");
