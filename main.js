@@ -419,7 +419,7 @@ undoBtn.onclick = () => {
 // ------------------------------------------------------------
 // GAME END
 // ------------------------------------------------------------
-function finalizeGame() {
+async function finalizeGame() {
   updateScoreboard();
   updateRoundInfo();
   updateCurrentPlayerLabel();
@@ -438,8 +438,8 @@ function finalizeGame() {
     createdAt: new Date().toISOString()
   };
 
-  saveGameRecord(gameRecord);
-  updateEloForGame(gameRecord);
+  await saveGameRecord(gameRecord);
+  await updateEloForGame(gameRecord);
 }
 
 
