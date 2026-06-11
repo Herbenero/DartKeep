@@ -348,13 +348,10 @@ function buildDartboard() {
   }
 
   // Miss button - skip turn without scoring
-  document.getElementById("missBtn").onclick = () => {
-    nextPlayer(state);
-    updateScoreboard();
-    updateRoundInfo();
-    updateCurrentPlayerLabel();
-    lastMultiplier = 1; // Reset multiplier
-  };
+  // Look inside buildDartboard() for the missBtn logic
+document.getElementById("missBtn").onclick = () => {
+  autoAdvanceTurn(); // Use the helper here as well
+};
 
   // Multiplier buttons
   document.querySelectorAll(".multiplier-row button:not(#missBtn)").forEach(btn => {
