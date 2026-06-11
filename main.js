@@ -32,7 +32,6 @@ const winnerBanner = document.getElementById("winnerBanner");
 const leaderboardTable = document.querySelector("#leaderboardTable tbody");
 const gamesTable = document.querySelector("#gamesTable tbody");
 
-
 // ------------------------------------------------------------
 // NAVIGATION
 // ------------------------------------------------------------
@@ -56,7 +55,6 @@ function showScreen(which) {
   }
 }
 
-
 // ------------------------------------------------------------
 // HOME SCREEN — BUILD GAME BUTTONS
 // ------------------------------------------------------------
@@ -73,7 +71,6 @@ function buildHomeButtons() {
 }
 
 buildHomeButtons();
-
 
 // ------------------------------------------------------------
 // SETUP SCREEN
@@ -118,14 +115,14 @@ startGameBtn.onclick = () => {
   beginGame();
 };
 
-
 // ------------------------------------------------------------
 // GAME SCREEN
 // ------------------------------------------------------------
-let state = null;
-
 function beginGame() {
   state = createGameState(selectedGameDef, setupPlayers);
+
+  // Reset darts counter for new game
+  dartsThrownThisTurn = 0;
 
   gameTitle.textContent = selectedGameDef.name;
   winnerBanner.classList.add("hidden");
@@ -139,6 +136,7 @@ function beginGame() {
   showScreen("game");
 }
 
+// (rest of file unchanged)
 
 // ------------------------------------------------------------
 // SCOREBOARD RENDERING
