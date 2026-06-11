@@ -65,8 +65,7 @@ function buildHomeButtons() {
   getAllGames().forEach(game => {
     const btn = document.createElement("button");
     btn.textContent = game.name;
-    btn.style.display = "block";
-    btn.style.marginBottom = "8px";
+    // Removed btn.style.display = "block" to allow the CSS Grid to work
     btn.onclick = () => startSetup(game.id);
     gameButtonsContainer.appendChild(btn);
   });
