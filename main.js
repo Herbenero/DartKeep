@@ -416,19 +416,17 @@ function autoAdvanceTurn() {
 // ------------------------------------------------------------
 nextPlayerBtn.onclick = () => {
   if (state.gameOver) return;
-  nextPlayer(state);
-  updateScoreboard();
-  updateRoundInfo();
-  updateCurrentPlayerLabel();
-  lastMultiplier = 1; // Reset multiplier
+  autoAdvanceTurn(); // Use the new helper instead of calling nextPlayer directly
 };
 
 undoBtn.onclick = () => {
   undoLast(state);
+  // Decrement counter if a dart was actually undone
+  if (dartsThrownThisTurn > 0) dartsThrownThisTurn--; 
   updateScoreboard();
   updateRoundInfo();
   updateCurrentPlayerLabel();
-  lastMultiplier = 1; // Reset multiplier
+  lastMultiplier = 1;
 };
 
 
