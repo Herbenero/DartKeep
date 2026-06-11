@@ -24,7 +24,7 @@ const DartGames = {
   quick_draw: { id: "quick_draw", name: "Quick Draw", kind: "rounds", rounds: 3, dartsPerTurn: 3, scoringType: "sum", winnerType: "highest" },
   shanghai: { id: "shanghai", name: "Shanghai", kind: "rounds", rounds: 20, dartsPerTurn: 3, scoringType: "sum", winnerType: "highest" },
   shanghai_7: { id: "shanghai_7", name: "Shanghai 7", kind: "rounds", rounds: 7, dartsPerTurn: 3, scoringType: "sum", winnerType: "highest" },
-  shove_penny: { id: "shove_penny", name: "Shove a Penny", kind: "cricket", targets: [20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 25,] dartsPerTurn: 3, scoringType: "cricket", winnerType: "closed" },
+  shove_penny: { id: "shove_penny", name: "Shove a Penny", kind: "cricket", targets: [20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 25], dartsPerTurn: 3, scoringType: "cricket", winnerType: "closedAndHigh" },
   tactics: { id: "tactics", name: "Tactics", kind: "cricket", targets: [20, 19, 18, 17, 16, 15, 25], dartsPerTurn: 3, scoringType: "cricket", winnerType: "closedAndHigh" },
   tennis: { id: "tennis", name: "Tennis Darts", kind: "rounds", rounds: 6, dartsPerTurn: 3, scoringType: "sum", winnerType: "highest" },
   tictactoe: { id: "tictactoe", name: "Tic-Tac-Toe", kind: "rounds", rounds: 9, dartsPerTurn: 3, scoringType: "sum", winnerType: "highest" }
