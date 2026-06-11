@@ -1,8 +1,7 @@
 // storage-elo.js (Online Version)
 
-const BIN_ID = '6a2ad0e3f5f4af5e29dfe321
-';
-const API_KEY = 'YOUR_API_KEY_HERE';
+const BIN_ID = '6a2ad0e3f5f4af5e29dfe321';
+const API_KEY = '$2a$10$FahBJGmWqnfEa/M6NF2s8eQbttylJcYUn5l3vAbWI.Px8cwh02hm2';
 const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
 // Helper to fetch data from the online bin
