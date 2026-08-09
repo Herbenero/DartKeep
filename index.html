@@ -1,26 +1,25 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>DartKeep</title>
   <style>
-   /* Update the Games grid to support multiple columns */
-#gameButtons {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 12px;
-  width: 100%;
-  padding: 10px 0;
-}
-
-#gameButtons button {
-  width: 100%;
-  margin-bottom: 0 !important; /* Overrides the previous block display margin */
-  padding: 12px 8px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+    /* Update the Games grid to support multiple columns */
+    #gameButtons {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+      width: 100%;
+      padding: 10px 0;
+    }
+    #gameButtons button {
+      width: 100%;
+      margin-bottom: 0 !important;
+      padding: 12px 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     body {
       font-family: system-ui, sans-serif;
       margin: 0;
@@ -143,7 +142,8 @@
       padding: 10px 0;
       font-size: 16px;
     }
-    .multiplier-row, .bull-row {
+    .multiplier-row,
+    .bull-row {
       display: flex;
       gap: 6px;
       margin-top: 8px;
@@ -158,72 +158,49 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
-   /* ... existing styles ... */
-
-    /* ADD THIS AT THE BOTTOM OF THE STYLE TAG */
     .active-target {
-      background-color: #f59e0b !important; /* Amber highlight */
+      background-color: #f59e0b !important;
       color: #111827 !important;
       font-weight: bold;
       border-radius: 4px;
     }
   </style>
 </head>
-
 <body>
   <header>
-  <div style="display:flex; align-items:center; gap:12px;">
-    <img src="assets/dartkeep3.png" 
-         alt="DartKeep Logo" 
-         style="height:48px; width:auto;" />
-    <h1 style="margin:0;">DartKeep</h1>
-  </div>
-
-  <div>
-    <button id="homeBtn" class="secondary">Home</button>
-    <button id="leaderboardBtn" class="secondary">Leaderboard</button>
-  </div>
-</header>
-
+    <div style="display:flex; align-items:center; gap:12px;">
+      <img src="assets/dartkeep3.png" alt="DartKeep Logo" style="height:48px; width:auto;" />
+      <h1 style="margin:0;">DartKeep</h1>
+    </div>
+    <div>
+      <button id="homeBtn" class="secondary">Home</button>
+      <button id="leaderboardBtn" class="secondary">Leaderboard</button>
+    </div>
+  </header>
 
   <main>
-
     <!-- HOME SCREEN -->
     <section id="homeScreen">
-  <div class="card" style="text-align:center;">
-    <img src="assets/dartkeep3.png" 
-         alt="DartKeep Logo" 
-         style="max-width:180px; margin-bottom:12px;" />
-    <h2>Games</h2>
-    <div id="gameButtons" class="button-group">
-  <a href="https://herbenero.github.io/CountUp/" target="_blank" rel="noopener noreferrer">
-    <button type="button">Game 1 Name</button>
-  </a>
-  <a href="https://herbenero.github.io/Shanghai/" target="_blank" rel="noopener noreferrer">
-    <button type="button">Game 2 Name</button>
-  </a>
-</div>
-  </div>
-
-
+      <div class="card" style="text-align:center;">
+        <img src="assets/dartkeep3.png" alt="DartKeep Logo" style="max-width:180px; margin-bottom:12px;" />
+        <h2>Games</h2>
+        <div id="gameButtons" class="button-group"></div>
+      </div>
       <div class="card">
         <h2>Leaderboard</h2>
         <button id="openLeaderboardFromHome">Open Leaderboard</button>
-             </div>
+      </div>
     </section>
 
     <!-- GAME SETUP -->
     <section id="setupScreen" class="hidden">
       <div class="card">
         <h2 id="setupGameName"></h2>
-
         <div class="row">
           <input id="playerNameInput" type="text" placeholder="Add player/team" />
           <button id="addPlayerBtn">Add</button>
         </div>
-
         <div id="playersList" class="players-list"></div>
-
         <div class="row">
           <button id="startGameBtn">Start Game</button>
         </div>
@@ -234,36 +211,28 @@
     <section id="gameScreen" class="hidden">
       <div class="card">
         <h2 id="gameTitle"></h2>
-
         <div id="roundInfo" style="margin-bottom:8px;"></div>
-
         <div id="scoreboard"></div>
-
         <div style="margin-top:12px;">
           <div>Current Player: <span id="currentPlayerLabel" class="tag"></span></div>
-
           <!-- Dartboard Input -->
           <div id="dartboardArea">
             <div class="dartboard-grid" id="dartboardNumbers"></div>
-
             <div class="multiplier-row">
               <button id="missBtn" class="secondary">Miss</button>
               <button data-m="2">Double</button>
               <button data-m="3">Triple</button>
             </div>
-
             <div class="bull-row">
               <button data-bull="25">Bull</button>
               <button data-bull="50">Double Bull</button>
             </div>
           </div>
-
           <div class="row" style="margin-top:8px;">
             <button id="undoBtn" class="secondary">Undo</button>
             <button id="nextPlayerBtn">Next Player</button>
           </div>
         </div>
-
         <div id="winnerBanner" class="banner hidden"></div>
       </div>
     </section>
@@ -279,7 +248,6 @@
           <tbody></tbody>
         </table>
       </div>
-
       <div class="card">
         <h2>Recent Games</h2>
         <table id="gamesTable">
@@ -290,7 +258,6 @@
         </table>
       </div>
     </section>
-
   </main>
 
   <!-- MODULES -->
@@ -298,6 +265,5 @@
   <script src="game-engine.js"></script>
   <script src="storage-elo.js"></script>
   <script src="main.js"></script>
-
 </body>
 </html>
