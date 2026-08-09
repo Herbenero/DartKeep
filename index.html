@@ -4,26 +4,6 @@
   <meta charset="UTF-8" />
   <title>DartKeep</title>
   <style>
-    /* Update the Games grid to support multiple columns */
-    #gameButtons {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 12px;
-      width: 100%;
-      padding: 10px 0;
-    }
-    #gameButtons a {
-      text-decoration: none;
-      width: 100%;
-    }
-    #gameButtons button {
-      width: 100%;
-      margin-bottom: 0 !important;
-      padding: 12px 8px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
     body {
       font-family: system-ui, sans-serif;
       margin: 0;
@@ -44,27 +24,8 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
-    button {
-      background: #2563eb;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    button.secondary {
-      background: #4b5563;
-    }
-    button:disabled {
-      opacity: 0.5;
-      cursor: default;
-    }
     main {
       padding: 16px;
-    }
-    .hidden {
-      display: none;
     }
     .card {
       background: #111827;
@@ -72,101 +33,38 @@
       border-radius: 8px;
       padding: 12px;
       margin-bottom: 16px;
+      text-align: center;
     }
     .card h2 {
       margin-top: 0;
       font-size: 18px;
     }
-    .row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    input {
-      padding: 6px 8px;
-      border-radius: 4px;
-      border: 1px solid #4b5563;
-      background: #111827;
-      color: #e5e7eb;
-    }
-    .players-list span {
-      display: inline-block;
-      background: #1f2937;
-      padding: 4px 8px;
-      border-radius: 999px;
-      margin: 2px;
-    }
-    .scoreboard {
+    #gameButtons {
       display: grid;
-      grid-template-columns: 1.5fr repeat(12, 1fr) 1fr;
-      gap: 4px;
-      font-size: 13px;
-      align-items: center;
-    }
-    .scoreboard-header {
-      font-weight: 600;
-      border-bottom: 1px solid #374151;
-      padding-bottom: 4px;
-      margin-bottom: 4px;
-    }
-    .scoreboard-cell {
-      padding: 4px;
-      text-align: center;
-    }
-    .scoreboard-player {
-      text-align: left;
-      font-weight: 500;
-    }
-    .current-player {
-      background: #1d4ed8;
-      border-radius: 4px;
-    }
-    .banner {
-      margin-top: 12px;
-      padding: 10px;
-      border-radius: 6px;
-      background: linear-gradient(90deg, #22c55e, #16a34a);
-      color: #022c22;
-      font-weight: 700;
-      text-align: center;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-    /* Dartboard grid */
-    .dartboard-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 6px;
-      max-width: 260px;
-      margin-top: 10px;
-    }
-    .dartboard-grid button {
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+      width: 100%;
       padding: 10px 0;
-      font-size: 16px;
     }
-    .multiplier-row,
-    .bull-row {
-      display: flex;
-      gap: 6px;
-      margin-top: 8px;
-      max-width: 260px;
+    #gameButtons a {
+      text-decoration: none;
+      width: 100%;
     }
-    .tag {
-      display: inline-block;
-      padding: 2px 6px;
-      border-radius: 999px;
-      background: #1f2937;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+    #gameButtons button {
+      width: 100%;
+      padding: 12px 8px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .active-target {
-      background-color: #f59e0b !important;
-      color: #111827 !important;
-      font-weight: bold;
-      border-radius: 4px;
+    #gameButtons button:hover {
+      background: #1d4ed8;
     }
   </style>
 </head>
@@ -176,105 +74,23 @@
       <img src="assets/dartkeep3.png" alt="DartKeep Logo" style="height:48px; width:auto;" />
       <h1 style="margin:0;">DartKeep</h1>
     </div>
-    <div>
-      <button id="homeBtn" class="secondary">Home</button>
-      <button id="leaderboardBtn" class="secondary">Leaderboard</button>
-    </div>
   </header>
 
   <main>
-    <!-- HOME SCREEN -->
     <section id="homeScreen">
-      <div class="card" style="text-align:center;">
+      <div class="card">
         <img src="assets/dartkeep3.png" alt="DartKeep Logo" style="max-width:180px; margin-bottom:12px;" />
-        <h2>Games</h2>
-        <div id="gameButtons" class="button-group">
-          <a href="https://herbenero.github.io/CountUp/" target="_blank" rel="noopener noreferrer">
+        <h2>Repositories</h2>
+        <div id="gameButtons">
+          <a href="https://github.com/Herbenero/CountUp" target="_blank" rel="noopener noreferrer">
             <button type="button">Count Up</button>
           </a>
-          <a href="https://herbenero.github.io/Shanghai/" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/Herbenero/Shanghai" target="_blank" rel="noopener noreferrer">
             <button type="button">Shanghai</button>
           </a>
         </div>
       </div>
-      <div class="card">
-        <h2>Leaderboard</h2>
-        <button id="openLeaderboardFromHome">Open Leaderboard</button>
-      </div>
-    </section>
-
-    <!-- GAME SETUP -->
-    <section id="setupScreen" class="hidden">
-      <div class="card">
-        <h2 id="setupGameName"></h2>
-        <div class="row">
-          <input id="playerNameInput" type="text" placeholder="Add player/team" />
-          <button id="addPlayerBtn">Add</button>
-        </div>
-        <div id="playersList" class="players-list"></div>
-        <div class="row">
-          <button id="startGameBtn">Start Game</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- GAME SCREEN -->
-    <section id="gameScreen" class="hidden">
-      <div class="card">
-        <h2 id="gameTitle"></h2>
-        <div id="roundInfo" style="margin-bottom:8px;"></div>
-        <div id="scoreboard"></div>
-        <div style="margin-top:12px;">
-          <div>Current Player: <span id="currentPlayerLabel" class="tag"></span></div>
-          <!-- Dartboard Input -->
-          <div id="dartboardArea">
-            <div class="dartboard-grid" id="dartboardNumbers"></div>
-            <div class="multiplier-row">
-              <button id="missBtn" class="secondary">Miss</button>
-              <button data-m="2">Double</button>
-              <button data-m="3">Triple</button>
-            </div>
-            <div class="bull-row">
-              <button data-bull="25">Bull</button>
-              <button data-bull="50">Double Bull</button>
-            </div>
-          </div>
-          <div class="row" style="margin-top:8px;">
-            <button id="undoBtn" class="secondary">Undo</button>
-            <button id="nextPlayerBtn">Next Player</button>
-          </div>
-        </div>
-        <div id="winnerBanner" class="banner hidden"></div>
-      </div>
-    </section>
-
-    <!-- LEADERBOARD -->
-    <section id="leaderboardScreen" class="hidden">
-      <div class="card">
-        <h2>Leaderboard</h2>
-        <table id="leaderboardTable">
-          <thead>
-            <tr><th>Rank</th><th>Player</th><th>Elo</th><th>Games</th></tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <div class="card">
-        <h2>Recent Games</h2>
-        <table id="gamesTable">
-          <thead>
-            <tr><th>Game</th><th>Players</th><th>Winner</th><th>Date</th></tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
     </section>
   </main>
-
-  <!-- MODULES -->
-  <script src="dart-games.js"></script>
-  <script src="game-engine.js"></script>
-  <script src="storage-elo.js"></script>
-  <script src="main.js"></script>
 </body>
 </html>
