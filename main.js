@@ -450,7 +450,69 @@ async function finalizeGame() {
   await saveGameRecord(gameRecord);
   await updateEloForGame(gameRecord);
 }
+/**
+ * Asynchronously sends game results to Hellcastle-Rating backend/API.
+ * Safe against network failures and non-blocking to local game UI.
+ */
+function syncGameToHellcastle(gameData) {
+  // Construct standard payload
+  const payload = {
+    date: new Date().toISOString().split('T')[0],
+    game: gameData.gameName,
+    summary: gameData.summary, // e.g. "Herb (210), Kelly (155)"
+    rawScores: gameData.scores || {}
+  };
 
+  // Execute asynchronously without blocking caller thread
+  fetch("YOUR_HELLCASTLE_SHEET_API_URL", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+    keepalive: true // Ensures request completes even if user navigates away
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`Server returned HTTP status ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log("Successfully logged game to Hellcastle-Rating:", data);
+  })
+  .catch(error => {
+    console.warn("Hellcastle sync error (saving locally instead):", error);
+    queueFailedSync(payload);
+  });
+}
+
+// Fallback storage queue for offline or errored requests
+function queueFailedSync(payload) {
+  try {
+    const queue = JSON.parse(localStorage.getItem("hellcastle_sync_queue") || "[]");
+    queue.push(payload);
+    localStorage.setItem("hellcastle_sync_queue", JSON.stringify(queue));
+  } catch (e) {
+    console.error("Failed to write to local sync queue:", e);
+  }
+}
+
+// Optional retry mechanism to call on app initialize
+function retryFailedSyncs() {
+  const queue = JSON.parse(localStorage.getItem("hellcastle_sync_queue") || "[]");
+  if (queue.length === 0) return;
+
+  const remaining = [];
+  queue.forEach(payload => {
+    fetch("YOUR_HELLCASTLE_SHEET_API_URL", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+    .catch(() => remaining.push(payload));
+  });
+
+  localStorage.setItem("hellcastle_sync_queue", JSON.stringify(remaining));
+}
 
 // ------------------------------------------------------------
 // LEADERBOARD
